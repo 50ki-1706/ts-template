@@ -1,19 +1,48 @@
+"use client";
+
+import { useSession, signOut } from "@/lib/auth-client";
+import AuthForm from "@/components/AuthForm";
+import TodoList from "@/components/TodoList";
+
 export default function Home() {
+  const { data: session, isPending } = useSession();
+
+  if (isPending) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return <AuthForm />;
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <h1 className="text-5xl font-bold text-zinc-900 dark:text-white sm:text-6xl">
-          Welcome to{' '}
-          <a href="https://nextjs.org" className="text-blue-600 hover:underline">
-            Next.js!
-          </a>
-        </h1>
-        <p className="mt-6 text-lg text-zinc-700 dark:text-zinc-300 sm:text-xl">
-          Get started by editing{' '}
-          <code className="rounded bg-zinc-100 px-2 py-1 font-mono text-sm text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-            src/app/page.tsx
-          </code>
-        </p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <nav className="bg-white dark:bg-gray-800 shadow">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+              Todo App
+            </h1>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                {session.user.name || session.user.email}
+              </span>
+              <button
+                onClick={() => signOut()}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <main className="py-8">
+        <TodoList />
       </main>
     </div>
   );
