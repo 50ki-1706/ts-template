@@ -17,7 +17,7 @@ export const auth = betterAuth({
     enabled: true,
   },
   socialProviders: (() => {
-    const providers: Record<string, any> = {};
+    const providers: Record<string, { clientId: string; clientSecret: string }> = {};
     if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       providers.google = {
         clientId: process.env.GOOGLE_CLIENT_ID,
