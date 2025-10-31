@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useSession, signOut } from "@/lib/auth-client";
-import AuthForm from "@/components/AuthForm";
-import TodoList from "@/components/TodoList";
+import { useSession, signOut } from '@/lib/auth-client';
+import AuthForm from '@/components/AuthForm';
+import TodoList from '@/components/TodoList';
 
 export default function Home() {
   const { data: session, isPending } = useSession();
@@ -24,14 +24,13 @@ export default function Home() {
       <nav className="bg-white dark:bg-gray-800 shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-              Todo App
-            </h1>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">Todo App</h1>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600 dark:text-gray-300">
                 {session.user.name || session.user.email}
               </span>
               <button
+                type="button"
                 onClick={() => signOut()}
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
               >

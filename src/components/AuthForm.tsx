@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { signIn, signUp } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { signIn, signUp } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
@@ -31,23 +31,23 @@ export default function AuthForm() {
           name,
         });
       }
-      router.push("/");
+      router.push('/');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleOAuthSignIn = async (provider: "google" | "github") => {
+  const handleOAuthSignIn = async (provider: 'google' | 'github') => {
     try {
       await signIn.social({
         provider,
-        callbackURL: "/",
+        callbackURL: '/',
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -56,7 +56,7 @@ export default function AuthForm() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-            {isLogin ? "Sign in to your account" : "Create a new account"}
+            {isLogin ? 'Sign in to your account' : 'Create a new account'}
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -89,7 +89,7 @@ export default function AuthForm() {
                 autoComplete="email"
                 required
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white dark:bg-gray-800 ${
-                  isLogin ? "rounded-t-md" : ""
+                  isLogin ? 'rounded-t-md' : ''
                 } focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
                 placeholder="Email address"
                 value={email}
@@ -114,9 +114,7 @@ export default function AuthForm() {
             </div>
           </div>
 
-          {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
-          )}
+          {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
           <div>
             <button
@@ -124,7 +122,7 @@ export default function AuthForm() {
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Loading..." : isLogin ? "Sign in" : "Sign up"}
+              {loading ? 'Loading...' : isLogin ? 'Sign in' : 'Sign up'}
             </button>
           </div>
 
@@ -133,13 +131,11 @@ export default function AuthForm() {
               type="button"
               onClick={() => {
                 setIsLogin(!isLogin);
-                setError("");
+                setError('');
               }}
               className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
             >
-              {isLogin
-                ? "Need an account? Sign up"
-                : "Already have an account? Sign in"}
+              {isLogin ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
             </button>
           </div>
 
@@ -158,14 +154,14 @@ export default function AuthForm() {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <button
                 type="button"
-                onClick={() => handleOAuthSignIn("google")}
+                onClick={() => handleOAuthSignIn('google')}
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Google
               </button>
               <button
                 type="button"
-                onClick={() => handleOAuthSignIn("github")}
+                onClick={() => handleOAuthSignIn('github')}
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 GitHub

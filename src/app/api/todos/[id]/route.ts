@@ -1,19 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { todos } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { todos } from '@/lib/db/schema';
+import { eq, and } from 'drizzle-orm';
 
 // PATCH /api/todos/[id] - Update a todo
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: request.headers });
 
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id } = await params;
@@ -28,7 +25,7 @@ export async function PATCH(
       .limit(1);
 
     if (existingTodo.length === 0) {
-      return NextResponse.json({ error: "Todo not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Todo not found' }, { status: 404 });
     }
 
     const updatedTodo = await db
@@ -44,11 +41,8 @@ export async function PATCH(
 
     return NextResponse.json(updatedTodo[0]);
   } catch (error) {
-    console.error("Error updating todo:", error);
-    return NextResponse.json(
-      { error: "Failed to update todo" },
-      { status: 500 }
-    );
+    console.error('Error updating todo:', error);
+    return NextResponse.json({ error: 'Failed to update todo' }, { status: 500 });
   }
 }
 
@@ -61,7 +55,7 @@ export async function DELETE(
     const session = await auth.api.getSession({ headers: request.headers });
 
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id } = await params;
@@ -74,19 +68,14 @@ export async function DELETE(
       .limit(1);
 
     if (existingTodo.length === 0) {
-      return NextResponse.json({ error: "Todo not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Todo not found' }, { status: 404 });
     }
 
-    await db
-      .delete(todos)
-      .where(and(eq(todos.id, id), eq(todos.userId, session.user.id)));
+    await db.delete(todos).where(and(eq(todos.id, id), eq(todos.userId, session.user.id)));
 
-    return NextResponse.json({ message: "Todo deleted successfully" });
+    return NextResponse.json({ message: 'Todo deleted successfully' });
   } catch (error) {
-    console.error("Error deleting todo:", error);
-    return NextResponse.json(
-      { error: "Failed to delete todo" },
-      { status: 500 }
-    );
+    console.error('Error deleting todo:', error);
+    return NextResponse.json({ error: 'Failed to delete todo' }, { status: 500 });
   }
 }

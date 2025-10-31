@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { todos } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { todos } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
 
 // GET /api/todos - Get all todos for the authenticated user
 export async function GET(request: NextRequest) {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const session = await auth.api.getSession({ headers: request.headers });
 
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const userTodos = await db
@@ -21,11 +21,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(userTodos);
   } catch (error) {
-    console.error("Error fetching todos:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch todos" },
-      { status: 500 }
-    );
+    console.error('Error fetching todos:', error);
+    return NextResponse.json({ error: 'Failed to fetch todos' }, { status: 500 });
   }
 }
 
@@ -35,17 +32,14 @@ export async function POST(request: NextRequest) {
     const session = await auth.api.getSession({ headers: request.headers });
 
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
     const { title, description } = body;
 
     if (!title) {
-      return NextResponse.json(
-        { error: "Title is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     }
 
     const newTodo = await db
@@ -63,10 +57,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(newTodo[0], { status: 201 });
   } catch (error) {
-    console.error("Error creating todo:", error);
-    return NextResponse.json(
-      { error: "Failed to create todo" },
-      { status: 500 }
-    );
+    console.error('Error creating todo:', error);
+    return NextResponse.json({ error: 'Failed to create todo' }, { status: 500 });
   }
 }
