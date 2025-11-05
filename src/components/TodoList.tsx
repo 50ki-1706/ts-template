@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { useTodos, createTodo, updateTodo, deleteTodo } from '@/hooks/useTodos';
+import { useState } from 'react';
+import { createTodo, deleteTodo, updateTodo, useTodos } from '@/hooks/useTodos';
 import type { Todo } from '@/lib/db/schema';
 
 export default function TodoList() {
@@ -72,7 +72,9 @@ export default function TodoList() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Todos</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          My Todos
+        </h1>
         <button
           type="button"
           onClick={openCreateModal}
@@ -150,7 +152,11 @@ export default function TodoList() {
         </div>
       )}
 
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-50"
+      >
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="mx-auto max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">

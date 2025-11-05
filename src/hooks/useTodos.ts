@@ -41,7 +41,7 @@ export async function createTodo(title: string, description?: string) {
 
 export async function updateTodo(
   id: string,
-  updates: { title?: string; description?: string; completed?: boolean }
+  updates: { title?: string; description?: string; completed?: boolean },
 ) {
   const res = await fetch(`/api/todos/${id}`, {
     method: 'PATCH',

@@ -1,11 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { and, eq } from 'drizzle-orm';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { todos } from '@/lib/db/schema';
-import { eq, and } from 'drizzle-orm';
 
 // PATCH /api/todos/[id] - Update a todo
-export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const session = await auth.api.getSession({ headers: request.headers });
 
@@ -32,7 +36,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       .update(todos)
       .set({
         title: title ?? existingTodo[0].title,
-        description: description !== undefined ? description : existingTodo[0].description,
+        description:
+          description !== undefined ? description : existingTodo[0].description,
         completed: completed ?? existingTodo[0].completed,
         updatedAt: new Date(),
       })
@@ -42,14 +47,17 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     return NextResponse.json(updatedTodo[0]);
   } catch (error) {
     console.error('Error updating todo:', error);
-    return NextResponse.json({ error: 'Failed to update todo' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to update todo' },
+      { status: 500 },
+    );
   }
 }
 
 // DELETE /api/todos/[id] - Delete a todo
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await auth.api.getSession({ headers: request.headers });
@@ -71,11 +79,16 @@ export async function DELETE(
       return NextResponse.json({ error: 'Todo not found' }, { status: 404 });
     }
 
-    await db.delete(todos).where(and(eq(todos.id, id), eq(todos.userId, session.user.id)));
+    await db
+      .delete(todos)
+      .where(and(eq(todos.id, id), eq(todos.userId, session.user.id)));
 
     return NextResponse.json({ message: 'Todo deleted successfully' });
   } catch (error) {
     console.error('Error deleting todo:', error);
-    return NextResponse.json({ error: 'Failed to delete todo' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to delete todo' },
+      { status: 500 },
+    );
   }
 }

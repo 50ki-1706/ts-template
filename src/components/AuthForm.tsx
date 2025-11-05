@@ -1,8 +1,8 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { signIn, signUp } from '@/lib/auth-client';
-import { useRouter } from 'next/navigation';
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
@@ -114,7 +114,9 @@ export default function AuthForm() {
             </div>
           </div>
 
-          {error && <div className="text-red-500 text-sm text-center">{error}</div>}
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
 
           <div>
             <button
@@ -135,7 +137,9 @@ export default function AuthForm() {
               }}
               className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
             >
-              {isLogin ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
+              {isLogin
+                ? 'Need an account? Sign up'
+                : 'Already have an account? Sign in'}
             </button>
           </div>
 
