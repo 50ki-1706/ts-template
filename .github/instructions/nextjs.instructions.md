@@ -1,5 +1,7 @@
 # Next.js コードレビュー指示
 
+**applyTo**: `src/app/**/*`, `src/components/**/*`, `src/hooks/**/*`
+
 このファイルは Next.js に特化したコードレビュー指示を提供します。基本的なコーディング規則は `AGENTS.md` を参照してください。
 
 ## Next.js 固有のレビューポイント
@@ -151,97 +153,7 @@ function TodoListClient({ todos }: { todos: Todo[] }) {
 }
 ```
 
-### 3. useEffect の使用禁止と SWR の活用
-
-**このプロジェクトでは、データフェッチに useEffect を使用しないでください。**
-
-この制限の理由：
-- **パフォーマンス**: SWR はキャッシング、再検証、重複排除などの最適化を自動で行う
-- **SSR 互換性**: Server Components でサーバーサイドデータフェッチが可能
-- **コード品質**: useEffect は依存配列の管理が複雑で、バグの原因になりやすい
-- **ユーザー体験**: SWR の自動再検証とバックグラウンド更新により、最新データを保持し、より良い UX を提供
-
-#### useEffect の代替案
-
-1. **Server Components**: サーバーサイドでデータフェッチ
-2. **SWR**: クライアントサイドでのデータフェッチとキャッシング
-3. **イベントハンドラー**: ユーザーアクションに応じた処理
-
-#### SWR の使用
-
-**推奨パターン:**
-```tsx
-'use client';
-
-import useSWR from 'swr';
-
-export function TodoList() {
-  const { data: todos, error, isLoading, mutate } = useSWR('/api/todos');
-  
-  if (isLoading) return <div>読み込み中...</div>;
-  if (error) return <div>エラーが発生しました</div>;
-  
-  return (
-    <div>
-      {todos?.map(todo => (
-        <TodoItem key={todo.id} todo={todo} onUpdate={mutate} />
-      ))}
-    </div>
-  );
-}
-```
-
-#### useEffect が許可されるケース
-
-以下の場合のみ `useEffect` の使用を許可します：
-
-- **ブラウザ API の初期化**: Web Storage、Intersection Observer など
-- **サブスクリプション**: WebSocket、イベントリスナーの登録/解除
-- **DOM 操作**: サードパーティライブラリとの統合
-- **アナリティクス**: ページビューのトラッキング
-
-**許可される例:**
-```tsx
-'use client';
-
-export function MyComponent() {
-  useEffect(() => {
-    // ページビューをトラッキング
-    analytics.track('page_view', { page: window.location.pathname });
-  }, []);
-  
-  useEffect(() => {
-    // イベントリスナーの登録と解除
-    const handleResize = () => {
-      console.log('Window resized');
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-}
-```
-
-**禁止される例:**
-```tsx
-// 悪い例 - データフェッチに useEffect を使用
-'use client';
-
-export function TodoList() {
-  const [todos, setTodos] = useState([]);
-  
-  useEffect(() => {
-    // これは NG！SWR を使用すべき
-    fetch('/api/todos')
-      .then(res => res.json())
-      .then(data => setTodos(data));
-  }, []);
-  
-  return (/* ... */);
-}
-```
-
-### 4. Next.js ライブラリの活用
+### 3. Next.js ライブラリの活用
 
 #### next/image の使用
 
@@ -316,7 +228,7 @@ const HeavyComponent = dynamic(() => import('@/components/HeavyComponent'), {
 });
 ```
 
-### 5. API Routes の設計
+### 4. API Routes の設計
 
 #### Route Handlers の使用
 
@@ -359,7 +271,7 @@ try {
 }
 ```
 
-### 6. パフォーマンス最適化
+### 5. パフォーマンス最適化
 
 #### Streaming と Suspense
 
@@ -403,7 +315,6 @@ export default async function DashboardPage() {
 ## レビュー時の注意事項
 
 - **Server Components を優先**: Client Components は最小限に
-- **useEffect の代わりに SWR**: データフェッチは SWR を使用
 - **Next.js の機能を最大限活用**: Image, Font, Metadata API など
 - **パフォーマンス**: Streaming, Suspense, 並列データフェッチ
 - **SEO**: 適切なメタデータとサーバーサイドレンダリング

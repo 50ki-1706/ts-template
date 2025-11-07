@@ -1,5 +1,7 @@
 # TypeScript コードレビュー指示
 
+**applyTo**: `**/*.ts`, `**/*.tsx`
+
 このファイルは TypeScript に特化したコードレビュー指示を提供します。基本的なコーディング規則は `AGENTS.md` を参照してください。
 
 ## TypeScript 固有のレビューポイント
