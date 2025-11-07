@@ -315,6 +315,7 @@ export default async function DashboardPage() {
 ## レビュー時の注意事項
 
 - **Server Components を優先**: Client Components は最小限に
+- **useEffect の使用**: データフェッチでの使用制限については `react.instructions.md` を参照
 - **Next.js の機能を最大限活用**: Image, Font, Metadata API など
 - **パフォーマンス**: Streaming, Suspense, 並列データフェッチ
 - **SEO**: 適切なメタデータとサーバーサイドレンダリング
