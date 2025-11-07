@@ -275,8 +275,9 @@ import { TodoList, TodoItem } from '@/components/todos';
 
 #### React Compiler の活用
 
-- このプロジェクトでは React Compiler を使用しているため、`React.memo`, `useMemo`, `useCallback` は基本的に不要
-- ただし、明確なパフォーマンス問題がある場合のみ使用を検討
+- このプロジェクトでは React 19 の自動メモ化機能を前提としているため、`React.memo`, `useMemo`, `useCallback` は基本的に不要
+- React 19 では再レンダリングの最適化が自動で行われるため、手動の最適化は避ける
+- ただし、React DevTools Profiler で測定して明確なパフォーマンス問題がある場合のみ、個別に最適化を検討
 
 #### レンダリングの確認
 
